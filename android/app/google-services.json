@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "19456814207",
+    "project_id": "ugsf-menomics",
+    "storage_bucket": "ugsf-menomics.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19456814207:android:7e3df6b99b4c22cde6a34a",
+        "android_client_info": {
+          "package_name": "com.example.flutter_and_mysql_server"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "19456814207-buv0bn9bs8md9cqocr1p5t3bd8dr8m4n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm-7DCUcSTQ1C4MO4vzudnwTpwG5FGNh0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "19456814207-buv0bn9bs8md9cqocr1p5t3bd8dr8m4n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
