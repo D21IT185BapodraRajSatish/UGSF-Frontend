@@ -5,10 +5,10 @@ import 'package:flutter_and_mysql_server/utils/constants.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../model/user_model.dart';
 
 class PendingList extends StatefulWidget {
-  const PendingList({super.key});
+  String pageName = "PendingList";
+  PendingList({super.key});
 
   @override
   State<PendingList> createState() => _PendingListState();
@@ -20,7 +20,9 @@ class _PendingListState extends State<PendingList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    http.get(Uri.parse("http://$hostname:8080/getAll")).then((value) {
+    http
+        .get(Uri.parse("http://$hostname:8070/getPendingUserList"))
+        .then((value) {
       print(value.body);
       consumerList.clear();
       setState(() {
@@ -32,7 +34,9 @@ class _PendingListState extends State<PendingList> {
     }).catchError((e) => print(e));
     const oneSec = Duration(seconds: 15);
     Timer.periodic(oneSec, (Timer t) {
-      http.get(Uri.parse("http://$hostname:8080/getAll")).then((value) {
+      http
+          .get(Uri.parse("http://$hostname:8070/getPendingUserList"))
+          .then((value) {
         print(value.body);
         consumerList.clear();
         setState(() {
@@ -60,9 +64,25 @@ class _PendingListState extends State<PendingList> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) {
-                        return PendingRequestProfile(user: consumerList[index]);
+                        return PendingRequestProfile(
+                            user: consumerList[index],
+                            onTapedFrom: widget.pageName);
                       }),
-                    );
+                    ).then((value) {
+                      http
+                          .get(Uri.parse(
+                              "http://$hostname:8070/getPendingUserList"))
+                          .then((value) {
+                        print(value.body);
+                        consumerList.clear();
+                        setState(() {
+                          List<dynamic> jsonList = jsonDecode(value.body);
+                          for (var each in jsonList) {
+                            consumerList.add(UserModel.fromJson(each));
+                          }
+                        });
+                      }).catchError((e) => print(e));
+                    });
                   },
                   // trailing: SizedBox(
                   //   width: 100,
@@ -74,7 +94,7 @@ class _PendingListState extends State<PendingList> {
                   //           onPressed: () {
                   //             http
                   //                 .delete(Uri.parse(
-                  //                     "http://$hostname:8080/delete/" +
+                  //                     "http://$hostname:8070/delete/" +
                   //                         consumerList[index].id.toString()))
                   //                 .then((value) {
                   //               print("\n" + value.body);

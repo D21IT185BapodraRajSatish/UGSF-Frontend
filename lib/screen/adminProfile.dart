@@ -1,8 +1,44 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_and_mysql_server/utils/utils.dart';
+import 'dart:convert';
 
-class AdminProfile extends StatelessWidget {
-  const AdminProfile({super.key});
+import 'package:flutter/material.dart';
+import 'package:flutter_and_mysql_server/model/admin_model.dart';
+
+import 'package:flutter_and_mysql_server/utils/utils.dart';
+import 'package:http/http.dart' as http;
+
+import '../utils/constants.dart';
+
+class AdminProfile extends StatefulWidget {
+  String? userID;
+  AdminProfile(this.userID);
+
+  @override
+  
+  State<AdminProfile> createState() => _AdminProfileState();
+  
+  
+}
+
+class _AdminProfileState extends State<AdminProfile> {
+  //=new AdminModel("","","","",0,"","","",);
+  AdminModel? adminModel;
+  @override
+
+  bool get mounted => adminModel != null;
+  void initState() {
+    //TODO: implement initState
+//print(widget.userID ?? "Not able to print");
+    http
+        .get(Uri.parse("http://$hostname:8070/getAdmin/${widget.userID}"))
+        .then((value) {
+      setState(() {
+        
+        adminModel = AdminModel.fromJson(jsonDecode(value.body));
+      });
+    });
+    print(adminModel?.name ?? "");
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,38 +54,45 @@ class AdminProfile extends StatelessWidget {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      radius: 68,
-                      backgroundColor: Colors.grey[350],
-                    ),
+                    //     Container(
+                    //   margin: const EdgeInsets.symmetric(horizontal: 16),
+                    //   child: adminModel != null
+                    //       ? Image.network(
+                    //           adminModel!.profileImageURL,
+                    //           width: 150,
+                    //           height: 150,
+                    //         )
+                    //       : Container(),
+                    // ),
                     VSpace.lg,
-                    const Text("Name Of Admin", style: TextStyle(fontSize: 24)),
+                    Text(adminModel?.name ?? "",
+                        style: TextStyle(fontSize: 24)),
                   ]),
             ),
             VSpace.med,
             VSpace.lg,
-            const Text(
-              "Date Of Birth: DD/MM/YYYY",
-              style: TextStyle(fontSize: 16),
+            Text(
+              "Date Of Birth: ${adminModel?.dob ?? ""}",
+              style: const TextStyle(fontSize: 16),
             ),
             VSpace.med,
-            const Text(
-              "Personal ID : 12346789",
-              style: TextStyle(fontSize: 16),
+            Text(
+              "Personal ID : ${adminModel?.personalID ?? ""}",
+              style: const TextStyle(fontSize: 16),
             ),
             VSpace.med,
-            const Text(
-              "Address: ABC",
-              style: TextStyle(fontSize: 16),
+            Text(
+              "Address: ${adminModel?.address ?? ""}",
+              style: const TextStyle(fontSize: 16),
             ),
             VSpace.med,
-            const Text(
-              "Email : rajbapodra117@gmail.com",
-              style: TextStyle(fontSize: 16),
+            Text(
+              "Email : ${adminModel?.email ?? ""}",
+              style: const TextStyle(fontSize: 16),
             ),
             VSpace.med,
-            const Text(
-              "Mobile No : 8758676551",
+            Text(
+              "Mobile No : ${adminModel?.mobileNumber}",
               style: TextStyle(fontSize: 16),
             ),
             const Spacer(),

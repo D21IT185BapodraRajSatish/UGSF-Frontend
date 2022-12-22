@@ -14,7 +14,8 @@ import 'adminProfile.dart';
 import 'login.dart';
 
 class AdminHome extends StatefulWidget {
-  const AdminHome({super.key});
+  String? title;
+  AdminHome(this.title);
 
   @override
   State<AdminHome> createState() => _AdminHomeState();
@@ -22,11 +23,21 @@ class AdminHome extends StatefulWidget {
 
 class _AdminHomeState extends State<AdminHome> {
   int _selectedindex = 0;
-  List<Widget> listWidget = [
-    const PendingList(),
-    const AcceptedList(),
-    const AdminProfile(),
-  ];
+  List<Widget> listWidget = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    
+
+    listWidget = [
+      PendingList(),
+      AcceptedList("AcceptedList"),
+      AdminProfile(widget.title),
+    ];
+    
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,11 +48,9 @@ class _AdminHomeState extends State<AdminHome> {
               onPressed: () async {
                 final SharedPreferences _prefs =
                     await SharedPreferences.getInstance();
-                _prefs.setBool("isLogin", false);
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()));
+                _prefs.setBool("isLoginAdmin", false);
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
               },
               icon: const Icon(Icons.logout))
         ],
@@ -61,12 +70,15 @@ class _AdminHomeState extends State<AdminHome> {
             icon: Icon(Icons.person),
             label: "Profile",
           ),
+          
         ],
         currentIndex: _selectedindex,
         onTap: (int index) {
           print("User clicked on $index");
+
           setState(() {
             _selectedindex = index;
+            
           });
         },
       ),

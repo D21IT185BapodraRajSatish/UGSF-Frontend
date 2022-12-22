@@ -4,7 +4,9 @@
 
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_and_mysql_server/screen/UserHome.dart';
 import 'package:flutter_and_mysql_server/screen/adminhome.dart';
 import 'package:flutter_and_mysql_server/screen/login.dart';
 // import 'package:mysql1/mysql1.dart';
@@ -17,11 +19,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+    // options: DefaultFirebaseOptions.curre,
+    
   );
-  
+ 
   final SharedPreferences _prefs = await SharedPreferences.getInstance();
   runApp(MaterialApp(
+      
       debugShowCheckedModeBanner: false,
+      
       home:
-          (_prefs.getBool("isLogin") ?? false) ? AdminHome() : AdminHome()));
+          (_prefs.getBool("isLoginAdmin") ?? false) ? AdminHome("") : _prefs.getBool("isLoginForConsumer")?? false ? UserHome(""):LoginScreen()));
 }
